@@ -5,3 +5,4 @@ export { default as StateSelector } from './StateSelector';
 export { default as SearchBar } from './SearchBar';
 export { default as Disclaimer } from './Disclaimer';
 export { default as ScenarioClient } from './ScenarioClient';
+export { default as EmergencyButton } from './EmergencyButton';
