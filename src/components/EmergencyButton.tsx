@@ -6,7 +6,7 @@ export default function EmergencyButton() {
   return (
     <Link
       href="/emergency"
-      className="emergency-float fixed bottom-4 left-4 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-[var(--danger)] text-white font-medium shadow-lg shadow-[var(--danger)]/30 hover:bg-[var(--danger)]/90 hover:shadow-[var(--danger)]/50 transition-all duration-300 emergency-pulse"
+      className="emergency-float fixed bottom-4 left-1/2 -translate-x-1/2 sm:left-4 sm:translate-x-0 z-40 flex items-center gap-2 px-4 py-3 rounded-full bg-[var(--danger)] text-white font-medium shadow-lg shadow-[var(--danger)]/30 hover:bg-[var(--danger)]/90 hover:shadow-[var(--danger)]/50 transition-all duration-300 emergency-pulse"
       aria-label="Emergency contacts and resources"
     >
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

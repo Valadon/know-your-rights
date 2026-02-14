@@ -16,6 +16,7 @@ export interface Scenario {
   icon: string;
   category: string;
   description: string;
+  phrases?: string[];
   rights: Right[];
 }
 

@@ -1,4 +1,5 @@
 export { default as Header } from './Header';
+export { default as Footer } from './Footer';
 export { default as ScenarioCard } from './ScenarioCard';
 export { default as RightCard } from './RightCard';
 export { default as StateSelector } from './StateSelector';
@@ -6,3 +7,11 @@ export { default as SearchBar } from './SearchBar';
 export { default as Disclaimer } from './Disclaimer';
 export { default as ScenarioClient } from './ScenarioClient';
 export { default as EmergencyButton } from './EmergencyButton';
+export { default as PageTransition } from './PageTransition';
+export { default as HeroHeading } from './HeroHeading';
+export { default as HeroStats } from './HeroStats';
+export { default as KeyboardShortcuts } from './KeyboardShortcuts';
+export { default as ProgressBar } from './ProgressBar';
+export { default as PrintThisCardButton } from './PrintThisCardButton';
+export { default as TypewriterText } from './TypewriterText';
+export { default as QrCode } from './QrCode';

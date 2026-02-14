@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header, EmergencyButton } from "@/components";
+import { Header, Footer, EmergencyButton, PageTransition, KeyboardShortcuts } from "@/components";
 import { ThemeProvider } from "./providers";
 
 const geistSans = Geist({
@@ -41,10 +41,14 @@ export default function RootLayout({
             Skip to main content
           </a>
           <Header />
-          <main id="main-content" className="min-h-screen pb-24">
-            {children}
+          <main id="main-content" className="min-h-screen pb-32">
+            <PageTransition>
+              {children}
+            </PageTransition>
           </main>
+          <Footer />
           <EmergencyButton />
+          <KeyboardShortcuts />
         </ThemeProvider>
       </body>
     </html>

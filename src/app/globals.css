@@ -87,9 +87,163 @@ body {
   100% { background-position: 0% 50%; }
 }
 
+@keyframes hero-gradient-shift {
+  0% { background-position: 0% 0%; opacity: 0.6; }
+  50% { background-position: 100% 100%; opacity: 0.9; }
+  100% { background-position: 0% 0%; opacity: 0.6; }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+/* New Hero Animations */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes typing-cursor {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: var(--accent); }
+}
+
+.typing-cursor {
+  border-right: 2px solid var(--accent);
+  padding-right: 0.15em;
+  animation: typing-cursor 0.9s step-end infinite;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mesh-gradient {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+@keyframes blob-morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+  75% { border-radius: 60% 40% 60% 30% / 70% 30% 50% 60%; }
+}
+
+@keyframes shield-pulse {
+  0%, 100% { 
+    opacity: 0.03;
+    transform: scale(1) rotate(0deg);
+  }
+  50% { 
+    opacity: 0.08;
+    transform: scale(1.05) rotate(2deg);
+  }
+}
+
+@keyframes gavel-swing {
+  0%, 100% { 
+    opacity: 0.04;
+    transform: rotate(-5deg);
+  }
+  50% { 
+    opacity: 0.07;
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes icon-bounce {
+  0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  35% {
+    transform: translateY(-4px) scale(1.05) rotate(2deg);
+  }
+  60% {
+    transform: translateY(1px) scale(0.98) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes text-reveal {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes card-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes neon-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent);
+  }
+  50% { 
+    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent);
+  }
+}
+
+@keyframes slide-left {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-right {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes confetti-fall {
+  0% { 
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fade-scale {
+  animation: fadeScale 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .animate-fade-in {
@@ -119,6 +273,117 @@ body {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* Hero Animation Classes */
+.animate-text-reveal {
+  animation: text-reveal 0.8s ease-out forwards;
+}
+
+.animate-count-up {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+.animate-shield-bg {
+  animation: shield-pulse 8s ease-in-out infinite;
+}
+
+.animate-gavel-bg {
+  animation: gavel-swing 6s ease-in-out infinite;
+}
+
+.animate-blob {
+  animation: blob-morph 20s ease-in-out infinite;
+}
+
+.animate-mesh {
+  background-size: 400% 400%;
+  animation: mesh-gradient 15s ease infinite;
+}
+
+/* Gradient Mesh Background */
+.gradient-mesh {
+  background: 
+    radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+}
+
+.hero-animated-gradient {
+  background: linear-gradient(120deg, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.18), rgba(59, 130, 246, 0.18));
+  background-size: 200% 200%;
+  animation: hero-gradient-shift 16s ease infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+[data-theme="light"] .hero-animated-gradient {
+  background: linear-gradient(120deg, rgba(79, 70, 229, 0.12), rgba(147, 51, 234, 0.12), rgba(59, 130, 246, 0.12));
+}
+
+[data-theme="light"] .gradient-mesh {
+  background: 
+    radial-gradient(at 40% 20%, rgba(79, 70, 229, 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(147, 51, 234, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(219, 39, 119, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(147, 51, 234, 0.05) 0px, transparent 50%);
+}
+
+/* Card Slide Up Animation */
+.animate-card-slide-up {
+  animation: card-slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+/* Neon Glow Hover Effect */
+.card-neon-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-neon-hover:hover {
+  transform: scale(1.03) translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 
+    0 0 20px rgba(99, 102, 241, 0.3),
+    0 0 40px rgba(99, 102, 241, 0.2),
+    0 0 60px rgba(99, 102, 241, 0.1),
+    0 20px 40px -12px rgba(99, 102, 241, 0.4);
+}
+
+[data-theme="light"] .card-neon-hover:hover {
+  box-shadow: 
+    0 0 20px rgba(79, 70, 229, 0.2),
+    0 0 40px rgba(79, 70, 229, 0.15),
+    0 0 60px rgba(79, 70, 229, 0.1),
+    0 20px 40px -12px rgba(79, 70, 229, 0.3);
+}
+
+/* Quiz Transition Classes */
+.quiz-slide-left {
+  animation: slide-left 0.4s ease-out forwards;
+}
+
+.quiz-slide-right {
+  animation: slide-right 0.4s ease-out forwards;
+}
+
+/* Confetti Animation */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confetti-fall 3s ease-out forwards;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Timer Animation */
+.timer-pulse {
+  animation: timer-pulse 1s ease-in-out infinite;
 }
 
 /* Stagger animations for children */
@@ -184,10 +449,11 @@ body {
   background: var(--muted);
 }
 
-/* Focus styles */
+/* Focus styles - Enhanced for accessibility */
 *:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Smooth scrolling */
@@ -211,7 +477,74 @@ html {
   top: 0;
 }
 
-/* Page transition styles */
+/* ARIA live region styles */
+.aria-live-region {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Interactive element focus improvements */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] button:focus-visible,
+[data-theme="light"] a:focus-visible,
+[data-theme="light"] [role="button"]:focus-visible,
+[data-theme="light"] input:focus-visible,
+[data-theme="light"] select:focus-visible,
+[data-theme="light"] textarea:focus-visible {
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.15);
+}
+
+/* Card focus within */
+.card-focus:focus-within {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 16px;
+}
+
+/* Page transition wrapper */
+@keyframes page-fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  will-change: opacity, transform;
+}
+
+.page-transition-wrapper.page-transition-exit {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-wrapper.page-transition-enter {
+  opacity: 1;
+  transform: translateY(0);
+  animation: page-fade-slide 0.4s ease;
+}
+
+/* Legacy page transition styles (kept for compatibility) */
 .page-transition-enter {
   opacity: 0;
   transform: translateY(10px);
@@ -237,6 +570,10 @@ html {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.group:hover .scenario-card-icon {
+  animation: icon-bounce 0.65s ease-in-out;
+}
+
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.25);
@@ -246,23 +583,55 @@ html {
   box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.2);
 }
 
+/* Staggered card entrance animation */
+.card-entrance {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-entrance.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Counter animation trigger */
+.counter-animate {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.counter-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Print styles */
 @media print {
+  @page {
+    size: auto;
+    margin: 0.5in;
+  }
+
   /* Hide navigation and interactive elements */
   header,
   nav,
   .no-print,
-  button,
   .emergency-float,
   .disclaimer-container,
   .theme-toggle,
   .progress-bar-container,
-  .skip-link {
+  .reading-progress-container,
+  .skip-link,
+  .speech-bubble-action {
     display: none !important;
   }
 
   /* Show all expanded content */
-  .print-expand {
+  .print-expand,
+  [id^="right-content-"] {
     max-height: none !important;
     opacity: 1 !important;
     overflow: visible !important;
@@ -272,7 +641,8 @@ html {
   body {
     background: white !important;
     color: black !important;
-    font-size: 12pt;
+    font-size: 11pt;
+    line-height: 1.5;
   }
 
   /* Ensure all content is visible */
@@ -288,22 +658,25 @@ html {
     -webkit-backdrop-filter: none !important;
   }
 
-  /* Ensure borders are visible */
+  /* Ensure borders are visible but subtle */
   * {
-    border-color: #ccc !important;
+    border-color: #ddd !important;
     box-shadow: none !important;
+    text-shadow: none !important;
   }
 
   /* Page breaks */
-  .right-card {
+  .right-card,
+  .speech-bubble-card {
     page-break-inside: avoid;
     break-inside: avoid;
+    margin-bottom: 1rem !important;
   }
 
-  /* Links show their URL */
-  a[href]:after {
+  /* Links show their URL except for internal navigation */
+  a[href]:not([href^="#"]):after {
     content: " (" attr(href) ")";
-    font-size: 10pt;
+    font-size: 9pt;
     color: #666;
   }
 
@@ -316,6 +689,66 @@ html {
   * {
     animation: none !important;
     transition: none !important;
+  }
+
+  /* Pocket card specific styles */
+  .pocket-card-container {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  .pocket-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    width: 3.5in !important;
+    min-height: 5in !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .pocket-card-header {
+    background: #000 !important;
+    color: #fff !important;
+  }
+
+  .pocket-card-header * {
+    color: #fff !important;
+  }
+
+  .pocket-card-source {
+    color: #000 !important;
+  }
+
+  .pocket-card-body {
+    background: white !important;
+  }
+
+  .pocket-card-footer {
+    background: #f8fafc !important;
+  }
+
+  /* Ensure text is readable */
+  h1, h2, h3, h4, h5, h6 {
+    color: #1a1a2e !important;
+    page-break-after: avoid;
+  }
+
+  p {
+    color: #333 !important;
+  }
+
+  /* Card backgrounds for print */
+  .bg-\[var\(--card-bg\)\] {
+    background: #f8f9fa !important;
+    border: 1px solid #ddd !important;
+  }
+
+  /* Gradient text becomes solid for print */
+  .gradient-text {
+    background: none !important;
+    -webkit-text-fill-color: #4f46e5 !important;
+    color: #4f46e5 !important;
   }
 }
 
@@ -348,6 +781,10 @@ html {
   animation: emergency-pulse 2s ease-in-out infinite;
 }
 
+.emergency-float {
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
 @keyframes emergency-pulse {
   0%, 100% { 
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
@@ -374,5 +811,174 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+}
+
+[data-theme="light"] .progress-bar-fill {
+  box-shadow: 0 0 6px var(--accent), 0 0 12px var(--accent);
+}
+
+/* Scenario reading progress (below the sticky header) */
+.reading-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 45;
+  pointer-events: none;
+}
+
+.reading-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.18s ease;
+}
+
+/* "What to Say" Speech Bubble Cards */
+.speech-bubble-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.speech-bubble-card::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--accent);
+}
+
+.speech-bubble-card::after {
+  content: '';
+  position: absolute;
+  left: 22px;
+  top: -6px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--card-bg);
+}
+
+.speech-bubble-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+}
+
+.speech-bubble-quote {
+  font-style: italic;
+  color: var(--foreground);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.speech-bubble-quote::before {
+  content: '"';
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 0.25rem;
+}
+
+.speech-bubble-quote::after {
+  content: '"';
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 0.25rem;
+}
+
+.speech-bubble-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.speech-bubble-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: var(--accent-dark);
+  transform: scale(1.02);
+}
+
+.copy-btn:active {
+  transform: scale(0.98);
+}
+
+.copy-btn.copied {
+  background: var(--success);
+}
+
+/* Print styles for speech bubbles */
+@media print {
+  .speech-bubble-card {
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+  
+  .speech-bubble-card::before,
+  .speech-bubble-card::after {
+    display: none;
+  }
+  
+  .speech-bubble-action {
+    display: none;
   }
 }

@@ -1,0 +1,187 @@
+.pocketCardContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  border: 2px dashed var(--card-border);
+}
+
+.pocketCard {
+  width: 3.5in;
+  min-height: 5in;
+  background: white;
+  border-radius: 0.65rem;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 8px 18px -8px rgba(15, 23, 42, 0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pocketCardHeader {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  padding: 0.75rem 1rem;
+}
+
+.pocketCardBody {
+  flex: 1;
+  padding: 0.75rem;
+  background: white;
+}
+
+.pocketCardItem {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pocketCardItem:last-child {
+  border-bottom: none;
+}
+
+.pocketCardTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.125rem;
+  line-height: 1.2;
+}
+
+.pocketCardSummary {
+  font-size: 9px;
+  color: #475569;
+  line-height: 1.3;
+  margin-bottom: 0.125rem;
+}
+
+.pocketCardSource {
+  font-size: 8px;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.pocketCardFooter {
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pocketCardFooterRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qrBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.qrCode {
+  padding: 0.2rem;
+  background: white;
+  border-radius: 0.35rem;
+  border: 1px solid #e2e8f0;
+}
+
+.qrLabel {
+  font-size: 7px;
+  color: #64748b;
+  text-align: center;
+}
+
+.footerCopy {
+  flex: 1;
+}
+
+.footerText {
+  font-size: 10px;
+  color: #64748b;
+  text-align: left;
+}
+
+.footerLink {
+  font-size: 10px;
+  color: #6366f1;
+  text-align: left;
+  margin-top: 0.25rem;
+}
+
+@media print {
+  .pocketCardContainer {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  .pocketCard {
+    box-shadow: none !important;
+    border: 2px solid #333 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    width: 100% !important;
+    max-width: 3.5in !important;
+    margin: 0 auto !important;
+    background: white !important;
+  }
+
+  .pocketCardHeader {
+    background: #333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .pocketCardBody {
+    background: white !important;
+  }
+
+  .pocketCardFooter {
+    background: #f5f5f5 !important;
+    border-top: 1px solid #ccc !important;
+  }
+
+  .qrCode {
+    border: 1px solid #333 !important;
+    background: white !important;
+  }
+
+  .qrLabel,
+  .footerText,
+  .footerLink {
+    color: #000 !important;
+  }
+
+  .pocketCardTitle {
+    color: #000 !important;
+  }
+
+  .pocketCardSummary {
+    color: #333 !important;
+  }
+
+  .pocketCardSource {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  @page {
+    size: auto;
+    margin: 0.5in;
+  }
+}
+
+:global([data-theme="light"]) .pocketCard {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+:global([data-theme="dark"]) .pocketCardContainer {
+  background: var(--card-bg);
+}
+
+:global([data-theme="dark"]) .pocketCard {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}

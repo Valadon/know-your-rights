@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Right, StateVariation } from '@/types';
+import Link from 'next/link';
 
 interface RightCardProps {
   right: Right;
@@ -10,12 +11,73 @@ interface RightCardProps {
   scenarioId?: string;
 }
 
+// LocalStorage key for bookmarks
+const BOOKMARKS_KEY = 'kyr-bookmarked-rights';
+
+export interface BookmarkedRight {
+  id: string;
+  title: string;
+  scenarioId: string;
+  scenarioTitle: string;
+  scenarioIcon: string;
+  timestamp: number;
+}
+
+export function getBookmarkedRights(): BookmarkedRight[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    return JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+export function addBookmark(bookmark: BookmarkedRight): void {
+  if (typeof window === 'undefined') return;
+  const existing = getBookmarkedRights();
+  if (!existing.some(b => b.id === bookmark.id)) {
+    existing.push(bookmark);
+    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(existing));
+    window.dispatchEvent(new Event('kyr-bookmarks-update'));
+  }
+}
+
+export function removeBookmark(id: string): void {
+  if (typeof window === 'undefined') return;
+  const existing = getBookmarkedRights();
+  const filtered = existing.filter(b => b.id !== id);
+  localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(filtered));
+  window.dispatchEvent(new Event('kyr-bookmarks-update'));
+}
+
+export function isBookmarked(id: string): boolean {
+  if (typeof window === 'undefined') return false;
+  return getBookmarkedRights().some(b => b.id === id);
+}
+
 export default function RightCard({ right, index, selectedState, scenarioId }: RightCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied' | 'shared'>('idle');
+  const [isBookmarkedState, setIsBookmarkedState] = useState(false);
+  const [bookmarkAnimating, setBookmarkAnimating] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  // Generate unique ID for this right
+  const rightId = scenarioId ? `${scenarioId}-${index}` : `right-${index}`;
+
+  // Check bookmark status on mount and when bookmarks change
+  useEffect(() => {
+    setIsBookmarkedState(isBookmarked(rightId));
+    
+    const handleBookmarkUpdate = () => {
+      setIsBookmarkedState(isBookmarked(rightId));
+    };
+    
+    window.addEventListener('kyr-bookmarks-update', handleBookmarkUpdate);
+    return () => window.removeEventListener('kyr-bookmarks-update', handleBookmarkUpdate);
+  }, [rightId]);
 
   // Calculate content height for smooth animation
   useEffect(() => {
@@ -23,6 +85,26 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
       setContentHeight(contentRef.current.scrollHeight);
     }
   }, [right, selectedState]);
+
+  // Listen for expand-all event (for printing)
+  useEffect(() => {
+    const handleExpandAll = () => setIsExpanded(true);
+    window.addEventListener('kyr-expand-all', handleExpandAll);
+    return () => window.removeEventListener('kyr-expand-all', handleExpandAll);
+  }, []);
+
+  // Check URL for right to auto-expand
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const rightParam = urlParams.get('right');
+    if (rightParam === String(index) || rightParam === right.title.toLowerCase().replace(/\s+/g, '-')) {
+      setIsExpanded(true);
+      // Scroll to this card after a short delay
+      setTimeout(() => {
+        buttonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }, [index, right.title]);
 
   const getStateVariation = useCallback((): StateVariation | undefined => {
     return right.stateVariations.find((v) => v.state === selectedState);
@@ -39,11 +121,11 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
     }
   };
 
-  // Share functionality
+  // Share functionality - creates deep link
   const handleShare = async () => {
-    const shareText = `${right.title}\n\n${right.description}\n\nSource: ${right.source}`;
+    const rightSlug = right.title.toLowerCase().replace(/\s+/g, '-');
     const shareUrl = scenarioId 
-      ? `${window.location.origin}/scenario/${scenarioId}?right=${index}&state=${selectedState || ''}`
+      ? `${window.location.origin}/scenario/${scenarioId}?right=${rightSlug}${selectedState ? `&state=${selectedState}` : ''}`
       : window.location.href;
 
     // Try Web Share API first
@@ -64,11 +146,34 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
 
     // Fallback to clipboard
     try {
-      await navigator.clipboard.writeText(`${shareText}\n\nRead more: ${shareUrl}`);
+      await navigator.clipboard.writeText(`${right.title}\n\n${right.description}\n\nRead more: ${shareUrl}`);
       setShareStatus('copied');
       setTimeout(() => setShareStatus('idle'), 2000);
     } catch (err) {
       // Clipboard failed, do nothing
+    }
+  };
+
+  // Toggle bookmark
+  const handleBookmarkToggle = () => {
+    setBookmarkAnimating(true);
+    setTimeout(() => setBookmarkAnimating(false), 300);
+    
+    if (isBookmarkedState) {
+      removeBookmark(rightId);
+    } else {
+      // Get scenario info from URL or prop
+      const scenarioTitle = document.querySelector('h1')?.textContent || 'Unknown Scenario';
+      const scenarioIcon = document.querySelector('.text-5xl, .text-6xl')?.textContent || '📋';
+      
+      addBookmark({
+        id: rightId,
+        title: right.title,
+        scenarioId: scenarioId || 'unknown',
+        scenarioTitle,
+        scenarioIcon,
+        timestamp: Date.now(),
+      });
     }
   };
 
@@ -103,7 +208,7 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
           aria-label={`${right.title}. ${isExpanded ? 'Collapse' : 'Expand'} to read more.`}
         >
           <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
+            <div className="flex-1 pr-8">
               <h3 className="text-lg font-bold text-[var(--foreground)] mb-2 pr-16">
                 {right.title}
               </h3>
@@ -135,7 +240,7 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
         {/* Expanded content with smooth height animation */}
         <div 
           id={`right-content-${index}`}
-          className="overflow-hidden transition-all duration-300 ease-out"
+          className="right-card-content overflow-hidden transition-all duration-300 ease-out"
           style={{ 
             maxHeight: isExpanded ? `${contentHeight + 50}px` : '0px',
             opacity: isExpanded ? 1 : 0,
@@ -191,35 +296,60 @@ export default function RightCard({ right, index, selectedState, scenarioId }: R
                 <span className="text-[var(--accent-light)] font-medium">{right.source}</span>
               </div>
 
-              {/* Share button */}
-              <button
-                onClick={handleShare}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors no-print"
-                aria-label="Share this right"
-              >
-                {shareStatus === 'copied' ? (
-                  <>
-                    <svg className="w-4 h-4 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-[var(--success)]">Copied!</span>
-                  </>
-                ) : shareStatus === 'shared' ? (
-                  <>
-                    <svg className="w-4 h-4 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-[var(--success)]">Shared!</span>
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    <span>Share</span>
-                  </>
-                )}
-              </button>
+              {/* Action buttons: Share + Bookmark */}
+              <div className="flex items-center gap-2">
+                {/* Bookmark button */}
+                <button
+                  onClick={handleBookmarkToggle}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 no-print ${
+                    isBookmarkedState 
+                      ? 'text-[var(--warning)] bg-[var(--warning)]/10' 
+                      : 'text-[var(--muted)] hover:text-[var(--warning)] hover:bg-[var(--warning)]/10'
+                  }`}
+                  aria-label={isBookmarkedState ? 'Remove bookmark' : 'Bookmark this right'}
+                  title={isBookmarkedState ? 'Saved to your rights' : 'Save this right'}
+                >
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-200 ${bookmarkAnimating ? 'scale-125' : ''}`} 
+                    fill={isBookmarkedState ? 'currentColor' : 'none'} 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                  <span>{isBookmarkedState ? 'Saved' : 'Save'}</span>
+                </button>
+
+                {/* Share button */}
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors no-print"
+                  aria-label="Share this right"
+                >
+                  {shareStatus === 'copied' ? (
+                    <>
+                      <svg className="w-4 h-4 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-[var(--success)]">Copied!</span>
+                    </>
+                  ) : shareStatus === 'shared' ? (
+                    <>
+                      <svg className="w-4 h-4 text-[var(--success)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-[var(--success)]">Shared!</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                      </svg>
+                      <span>Share</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
